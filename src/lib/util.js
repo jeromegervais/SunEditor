@@ -161,32 +161,18 @@ const util = {
      * @returns {String}
      */
     convertContentsForEditor: function (contents) {
-        let tag, baseHtml, innerHTML = '';
+        let innerHTML = '';
+        let tag = this._d.createRange().createContextualFragment(contents).childNodes;
         contents = contents.trim();
 
-        tag = this._d.createRange().createContextualFragment(contents).childNodes;
-
         for (let i = 0, len = tag.length; i < len; i++) {
-            baseHtml = tag[i].outerHTML || tag[i].textContent;
-
-            if (tag[i].nodeType === 3) {
-                const textArray = baseHtml.split(/\n/g);
-                let text = '';
-                for (let t = 0, tLen = textArray.length; t < tLen; t++) {
-                    text = textArray[t].trim();
-                    if (text.length > 0) innerHTML += '<P>' + text + '</p>';
-                }
-            } else {
-                innerHTML += baseHtml;
-            }
+            innerHTML += tag[i].outerHTML || tag[i].textContent;
         }
 
         const ec = {'&': '&amp;', '\u00A0': '&nbsp;', '\'': '&quot;', '<': '&amp;lt;', '>': '&amp;gt;'};
         contents = contents.replace(/&|\u00A0|'|<|>/g, function (m) {
             return (typeof ec[m] === 'string') ? ec[m] : m;
         });
-
-        if (innerHTML.length === 0) innerHTML = '<p>' + (contents.length > 0 ? contents : '<br>') + '</p>';
 
         return this._tagConvertor(innerHTML.replace(this._deleteExclusionTags, ''));
     },

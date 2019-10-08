@@ -1196,12 +1196,12 @@ export default function (context, pluginCallButtons, plugins, lang, _options) {
             // get line nodes
             const lineNodes = this.getSelectedElements();
 
-            if (!util.getFormatElement(startCon)) {
+            if (!util.getFormatElement(startCon) && !util.isBreak(_options.enter)) {
                 startCon = util.getChildElement(lineNodes[0], function (current) { return current.nodeType === 3; });
                 startOff = 0;
             }
 
-            if (!util.getFormatElement(endCon)) {
+            if (!util.getFormatElement(endCon) && !util.isBreak(_options.enter)) {
                 endCon = util.getChildElement(lineNodes[lineNodes.length - 1], function (current) { return current.nodeType === 3; });
                 endOff = endCon.textContent.length;
             }
@@ -2818,7 +2818,7 @@ export default function (context, pluginCallButtons, plugins, lang, _options) {
 
             const formatEl = util.getFormatElement(core.getSelectionNode());
             const rangeEl = util.getRangeFormatElement(core.getSelectionNode());
-            if (core.getRange().collapsed && !/^br$/.test(_options.enter) && (!formatEl || formatEl === rangeEl) && targetElement.getAttribute('contenteditable') !== 'false') {
+            if (core.getRange().collapsed && !util.isBreak(_options.enter) && (!formatEl || formatEl === rangeEl) && targetElement.getAttribute('contenteditable') !== 'false') {
                 core.execCommand('formatBlock', false, util.isRangeFormatElement(rangeEl) ? 'DIV' : 'P');
                 core.focus();
             }
@@ -3217,7 +3217,7 @@ export default function (context, pluginCallButtons, plugins, lang, _options) {
 
             const formatEl = util.getFormatElement(selectionNode);
             const rangeEl = util.getRangeFormatElement(selectionNode);
-            if (!formatEl || formatEl === rangeEl) {
+            if ((!formatEl || formatEl === rangeEl) && !util.isBreak(_options.enter)) {
                 core.execCommand('formatBlock', false, util.isRangeFormatElement(rangeEl) ? 'DIV' : 'P');
                 core.focus();
                 selectionNode = core.getSelectionNode();

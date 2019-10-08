@@ -49,7 +49,8 @@ export default {
         editor_div.className = 'se-wrapper';
 
         /** --- init elements and create bottom bar --- */
-        const initHTML = util.convertContentsForEditor(element.value);
+        const contents = util.convertContentsForEditor(element.value);
+        const initHTML = !contents ? (!util.isBreak(options.enter) ? '<' + options.enter + '><br><' + options.enter + '>' : '<br>') : contents;
         const initElements = this._initElements(options, top_div, tool_bar.element, arrow, initHTML);
 
         const bottomBar = initElements.bottomBar;

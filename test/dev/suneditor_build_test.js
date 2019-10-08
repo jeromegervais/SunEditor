@@ -31,6 +31,7 @@ let s1 = suneditor.create(document.getElementById('editor'), {
     stickyToolbar: '0',
     videoResizing: false,
     imageWidth: 150,
+    enter: 'br'
     // fullPage: true,
     
 });
