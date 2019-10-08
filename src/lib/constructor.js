@@ -357,6 +357,8 @@ export default {
         options.height = options.height ? (/^\d+$/.test(options.height) ? options.height + 'px' : options.height) : (element.clientHeight ? element.clientHeight + 'px' : 'auto');
         options.minHeight = (/^\d+$/.test(options.minHeight) ? options.minHeight + 'px' : options.minHeight) || '';
         options.maxHeight = (/^\d+$/.test(options.maxHeight) ? options.maxHeight + 'px' : options.maxHeight) || '';
+        // key
+        options.enter = /^(p|div|br)$/i.test(options.enter) ? options.enter.toUpperCase() : 'p';
         // font, size, formats, color list
         options.font = options.font || null;
         options.fontSize = options.fontSize || null;

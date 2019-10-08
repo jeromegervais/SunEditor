@@ -1970,8 +1970,8 @@ export default function (context, pluginCallButtons, plugins, lang, _options) {
                     util.toggleClass(target, 'active');
                     break;
                 case 'save':
-                    if (typeof context.option.callBackSave === 'function') {
-                        context.option.callBackSave(this.getContents());
+                    if (typeof _options.callBackSave === 'function') {
+                        _options.callBackSave(this.getContents());
                     } else if (typeof userFunction.save === 'function') {
                         userFunction.save();
                     } else {
@@ -2049,7 +2049,7 @@ export default function (context, pluginCallButtons, plugins, lang, _options) {
             if (!wysiwygActive) {
                 const code_html = this._getCodeView();
 
-                if (context.option.fullPage) {
+                if (_options.fullPage) {
                     const parseDocument = (new this._w.DOMParser()).parseFromString(code_html, 'text/html');
                     const headChildren = parseDocument.head.children;
 
@@ -2078,12 +2078,12 @@ export default function (context, pluginCallButtons, plugins, lang, _options) {
                 this._variable._codeOriginCssText = this._variable._codeOriginCssText.replace(/(\s?display(\s+)?:(\s+)?)[a-zA-Z]+(?=;)/, 'display: none');
                 this._variable._wysiwygOriginCssText = this._variable._wysiwygOriginCssText.replace(/(\s?display(\s+)?:(\s+)?)[a-zA-Z]+(?=;)/, 'display: block');
 
-                if (context.option.height === 'auto' && !context.option.codeMirrorEditor) context.element.code.style.height = '0px';
+                if (_options.height === 'auto' && !_options.codeMirrorEditor) context.element.code.style.height = '0px';
                 this._variable.wysiwygActive = true;
                 this.focus();
             } else {
                 let codeValue = '';
-                if (context.option.fullPage) {
+                if (_options.fullPage) {
                     const headChildren = this._wd.head.children;
                     let headTags = '';
                     for (let i = 0, len = headChildren.length; i < len; i++) {
@@ -2102,8 +2102,8 @@ export default function (context, pluginCallButtons, plugins, lang, _options) {
                 this._variable._codeOriginCssText = this._variable._codeOriginCssText.replace(/(\s?display(\s+)?:(\s+)?)[a-zA-Z]+(?=;)/, 'display: block');
                 this._variable._wysiwygOriginCssText = this._variable._wysiwygOriginCssText.replace(/(\s?display(\s+)?:(\s+)?)[a-zA-Z]+(?=;)/, 'display: none');
 
-                if (context.option.height === 'auto' && !context.option.codeMirrorEditor) context.element.code.style.height = context.element.code.scrollHeight > 0 ? (context.element.code.scrollHeight + 'px') : 'auto';
-                if (context.option.codeMirrorEditor) context.option.codeMirrorEditor.refresh();
+                if (_options.height === 'auto' && !_options.codeMirrorEditor) context.element.code.style.height = context.element.code.scrollHeight > 0 ? (context.element.code.scrollHeight + 'px') : 'auto';
+                if (_options.codeMirrorEditor) _options.codeMirrorEditor.refresh();
                 
                 this._variable.wysiwygActive = false;
                 context.element.code.focus();
@@ -2166,7 +2166,7 @@ export default function (context, pluginCallButtons, plugins, lang, _options) {
                 topArea.style.cssText = this._variable._originCssText;
                 _d.body.style.overflow = this._variable._bodyOverflow;
 
-                if (context.option.stickyToolbar > -1) {
+                if (_options.stickyToolbar > -1) {
                     util.removeClass(toolbar, 'se-toolbar-sticky');
                     event.onScroll_window();
                 }
@@ -2233,7 +2233,7 @@ export default function (context, pluginCallButtons, plugins, lang, _options) {
             const windowObject = _w.open('', '_blank');
             windowObject.mimeType = 'text/html';
 
-            if (context.option.fullPage) {
+            if (_options.fullPage) {
                 windowObject.document.write('' +
                     '<!DOCTYPE html><html>' +
                     this._wd.head.outerHTML +
@@ -2293,7 +2293,7 @@ export default function (context, pluginCallButtons, plugins, lang, _options) {
                 figcaptions[i].removeAttribute('contenteditable');
             }
 
-            if (context.option.fullPage) {
+            if (_options.fullPage) {
                 return '<!DOCTYPE html><html>' + this._wd.head.outerHTML + this._wd.body.outerHTML + '</html>';
             } else {
                 return renderHTML.innerHTML;
@@ -2309,7 +2309,7 @@ export default function (context, pluginCallButtons, plugins, lang, _options) {
          */
         addDocEvent: function (type, listener, useCapture) {
             _d.addEventListener(type, listener, useCapture);
-            if (context.option.iframe) {
+            if (_options.iframe) {
                 this._wd.addEventListener(type, listener);
             }
         },
@@ -2322,7 +2322,7 @@ export default function (context, pluginCallButtons, plugins, lang, _options) {
          */
         removeDocEvent: function (type, listener) {
             _d.removeEventListener(type, listener);
-            if (context.option.iframe) {
+            if (_options.iframe) {
                 this._wd.removeEventListener(type, listener);
             }
         },
@@ -2338,7 +2338,7 @@ export default function (context, pluginCallButtons, plugins, lang, _options) {
             if (!charCounter) return true;
             if (!nextCharCount || nextCharCount < 0) nextCharCount = 0;
 
-            const maxCharCount = context.option.maxCharCount;
+            const maxCharCount = _options.maxCharCount;
 
             _w.setTimeout(function () {
                 charCounter.textContent = context.element.wysiwyg.textContent.length;
@@ -2398,8 +2398,8 @@ export default function (context, pluginCallButtons, plugins, lang, _options) {
          * @private
          */
         _setCodeView: function (value) {
-            if (context.option.codeMirrorEditor) {
-                context.option.codeMirrorEditor.getDoc().setValue(value);
+            if (_options.codeMirrorEditor) {
+                _options.codeMirrorEditor.getDoc().setValue(value);
             } else {
                 context.element.code.value = value;
             }
@@ -2410,7 +2410,7 @@ export default function (context, pluginCallButtons, plugins, lang, _options) {
          * @private
          */
         _getCodeView: function () {
-            return context.option.codeMirrorEditor ? context.option.codeMirrorEditor.getDoc().getValue() : context.element.code.value;
+            return _options.codeMirrorEditor ? _options.codeMirrorEditor.getDoc().getValue() : context.element.code.value;
         },
 
         /**
@@ -2418,7 +2418,7 @@ export default function (context, pluginCallButtons, plugins, lang, _options) {
          * @private
          */
         _init: function () {
-            core._ww = context.option.iframe ? context.element.wysiwygFrame.contentWindow : _w;
+            core._ww = _options.iframe ? context.element.wysiwygFrame.contentWindow : _w;
             core._wd = _d;
 
             _w.setTimeout(function () {
@@ -2437,8 +2437,8 @@ export default function (context, pluginCallButtons, plugins, lang, _options) {
             });
 
             core.codeViewDisabledButtons = context.element.toolbar.querySelectorAll('.se-toolbar button:not([class~="code-view-enabled"])');
-            core._isInline = /inline/i.test(context.option.mode);
-            core._isBalloon = /balloon/i.test(context.option.mode);
+            core._isInline = /inline/i.test(_options.mode);
+            core._isBalloon = /balloon/i.test(_options.mode);
 
             core.commandMap = {
                 FORMAT: context.tool.format,
@@ -2665,7 +2665,7 @@ export default function (context, pluginCallButtons, plugins, lang, _options) {
             core._variable.currentNodes = currentNodes.reverse();
 
             /**  Displays the current node structure to resizingBar */
-            if (context.option.showPathLabel) context.element.navigation.textContent = core._variable.currentNodes.join(' > ');
+            if (_options.showPathLabel) context.element.navigation.textContent = core._variable.currentNodes.join(' > ');
         },
 
         _cancelCaptionEdit: function () {
@@ -2818,7 +2818,7 @@ export default function (context, pluginCallButtons, plugins, lang, _options) {
 
             const formatEl = util.getFormatElement(core.getSelectionNode());
             const rangeEl = util.getRangeFormatElement(core.getSelectionNode());
-            if (core.getRange().collapsed && (!formatEl || formatEl === rangeEl) && targetElement.getAttribute('contenteditable') !== 'false') {
+            if (core.getRange().collapsed && !/^br$/.test(_options.enter) && (!formatEl || formatEl === rangeEl) && targetElement.getAttribute('contenteditable') !== 'false') {
                 core.execCommand('formatBlock', false, util.isRangeFormatElement(rangeEl) ? 'DIV' : 'P');
                 core.focus();
             }
@@ -2919,7 +2919,7 @@ export default function (context, pluginCallButtons, plugins, lang, _options) {
             const toolbar = context.element.toolbar;
             toolbar.style.visibility = 'hidden';
             toolbar.style.display = 'block';
-            core._inlineToolbarAttr.width = toolbar.style.width = context.option.toolbarWidth;
+            core._inlineToolbarAttr.width = toolbar.style.width = _options.toolbarWidth;
             core._inlineToolbarAttr.top = toolbar.style.top = (-1 - toolbar.offsetHeight) + 'px';
             
             if (typeof userFunction.showInline === 'function') userFunction.showInline(toolbar, context);
@@ -3291,7 +3291,7 @@ export default function (context, pluginCallButtons, plugins, lang, _options) {
 
             const element = context.element;
             const editorHeight = element.editorArea.offsetHeight;
-            const y = (this.scrollY || _d.documentElement.scrollTop) + context.option.stickyToolbar;
+            const y = (this.scrollY || _d.documentElement.scrollTop) + _options.stickyToolbar;
             const editorTop = event._getStickyOffsetTop() - (core._isInline ? element.toolbar.offsetHeight : 0);
             
             if (y < editorTop) {
@@ -3299,7 +3299,7 @@ export default function (context, pluginCallButtons, plugins, lang, _options) {
             }
             else if (y + core._variable.minResizingSize >= editorHeight + editorTop) {
                 if (!core._sticky) event._onStickyToolbar();
-                element.toolbar.style.top = (editorHeight + editorTop + context.option.stickyToolbar -y - core._variable.minResizingSize) + 'px';
+                element.toolbar.style.top = (editorHeight + editorTop + _options.stickyToolbar -y - core._variable.minResizingSize) + 'px';
             }
             else if (y >= editorTop) {
                 event._onStickyToolbar();
@@ -3326,7 +3326,7 @@ export default function (context, pluginCallButtons, plugins, lang, _options) {
                 element._stickyDummy.style.display = 'block';
             }
 
-            element.toolbar.style.top = context.option.stickyToolbar + 'px';
+            element.toolbar.style.top = _options.stickyToolbar + 'px';
             element.toolbar.style.width = core._isInline ? core._inlineToolbarAttr.width : element.toolbar.offsetWidth + 'px';
             util.addClass(element.toolbar, 'se-toolbar-sticky');
             core._sticky = true;
@@ -3457,7 +3457,7 @@ export default function (context, pluginCallButtons, plugins, lang, _options) {
             }
             
             /** code view area auto line */
-            if (context.option.height === 'auto' && !context.option.codeMirrorEditor) {
+            if (_options.height === 'auto' && !_options.codeMirrorEditor) {
                 context.element.code.addEventListener('keydown', event._codeViewAutoHeight, false);
                 context.element.code.addEventListener('keyup', event._codeViewAutoHeight, false);
                 context.element.code.addEventListener('paste', event._codeViewAutoHeight, false);
@@ -3465,7 +3465,7 @@ export default function (context, pluginCallButtons, plugins, lang, _options) {
 
             /** resizingBar */
             if (context.element.resizingBar) {
-                if (/\d+/.test(context.option.height)) {
+                if (/\d+/.test(_options.height)) {
                     context.element.resizingBar.addEventListener('mousedown', event.onMouseDown_resizingBar, false);
                 } else {
                     util.addClass(context.element.resizingBar, 'se-resizing-none');
@@ -3487,7 +3487,7 @@ export default function (context, pluginCallButtons, plugins, lang, _options) {
             _w.removeEventListener('scroll', event.onScroll_window);
 
             _w.addEventListener('resize', event.onResize_window, false);
-            if (context.option.stickyToolbar > -1) {
+            if (_options.stickyToolbar > -1) {
                 _w.addEventListener('scroll', event.onScroll_window, false);
             }
         },
@@ -3565,14 +3565,14 @@ export default function (context, pluginCallButtons, plugins, lang, _options) {
             event._removeEvent();
 
             core.plugins = options.plugins || core.plugins;
-            const mergeOptions = [context.option, options].reduce(function (init, option) {
+            const mergeOptions = [_options, options].reduce(function (init, option) {
                 Object.keys(option).forEach(function (key) {
                     init[key] = option[key];
                 });
                 return init;
             }, {});
 
-            const cons = _Constructor._setOptions(mergeOptions, context, core.plugins, context.option);
+            const cons = _Constructor._setOptions(mergeOptions, context, core.plugins, _options);
 
             if (cons.callButtons) {
                 pluginCallButtons = cons.callButtons;
@@ -3726,8 +3726,8 @@ export default function (context, pluginCallButtons, plugins, lang, _options) {
             context.tool.cover.style.display = 'block';
             context.element.wysiwyg.setAttribute('contenteditable', false);
 
-            if (context.option.codeMirrorEditor) {
-                context.option.codeMirrorEditor.setOption('readOnly', true);
+            if (_options.codeMirrorEditor) {
+                _options.codeMirrorEditor.setOption('readOnly', true);
             } else {
                 context.element.code.setAttribute('disabled', 'disabled');
             }
@@ -3740,8 +3740,8 @@ export default function (context, pluginCallButtons, plugins, lang, _options) {
             context.tool.cover.style.display = 'none';
             context.element.wysiwyg.setAttribute('contenteditable', true);
 
-            if (context.option.codeMirrorEditor) {
-                context.option.codeMirrorEditor.setOption('readOnly', false);
+            if (_options.codeMirrorEditor) {
+                _options.codeMirrorEditor.setOption('readOnly', false);
             } else {
                 context.element.code.removeAttribute('disabled');
             }
@@ -3752,7 +3752,7 @@ export default function (context, pluginCallButtons, plugins, lang, _options) {
          */
         show: function () {
             const topAreaStyle = context.element.topArea.style;
-            if (topAreaStyle.display === 'none') topAreaStyle.display = context.option.display;
+            if (topAreaStyle.display === 'none') topAreaStyle.display = _options.display;
         },
 
         /**
